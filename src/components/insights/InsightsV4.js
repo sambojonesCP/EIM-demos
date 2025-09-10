@@ -1,0 +1,263 @@
+import React, { useState } from 'react';
+import {
+  AlertTriangle,
+  CheckCircle2,
+  FileText,
+  Clock,
+  Stethoscope,
+  UserCheck,
+  ShieldCheck,
+  MessageCircle,
+  ArrowRight,
+  ChevronRight,
+  Activity,
+  Brain,
+  ClipboardList,
+  Sparkles
+} from 'lucide-react';
+
+export default function InsightsV4({ onStartOptimize }) {
+  // All insights data
+  const qualityMetrics = {
+    score: 85,
+    criticalIssues: 2,
+    improvements: 3,
+    positives: 4
+  };
+
+  const noteInsights = {
+    timeEfficiency: {
+      status: "attention",
+      message: "Documentation time: 18 min (above target)",
+      detail: "Target time for this visit type: 12-15 min"
+    },
+    patientCare: {
+      status: "success",
+      message: "All critical elements documented",
+      detail: "Including: vital signs, medications, follow-up plan"
+    },
+    quality: {
+      status: "warning",
+      message: "2 missing quality elements",
+      detail: "Social history and test interpretation details needed"
+    }
+  };
+
+  const actionItems = [
+    {
+      priority: "high",
+      type: "missing",
+      title: "Add Test Result Interpretation",
+      description: "Document your review of CBC and CMP results",
+      impact: "Medical Decision Making",
+      timeEstimate: "2-3 min"
+    },
+    {
+      priority: "medium",
+      type: "enhancement",
+      title: "Expand Social History",
+      description: "Include living situation and support system",
+      impact: "Care Coordination",
+      timeEstimate: "1-2 min"
+    }
+  ];
+
+  const patientExperience = {
+    score: 4.2,
+    strengths: [
+      "Clear explanations of procedures",
+      "Respectful communication",
+      "Patient concerns addressed"
+    ],
+    improvements: [
+      "More patient involvement in decisions",
+      "Simpler medical terminology"
+    ]
+  };
+
+  const quickStats = [
+    {
+      label: "Note Quality",
+      value: "85%",
+      trend: "up",
+      delta: "+3%"
+    },
+    {
+      label: "Time Spent",
+      value: "18 min",
+      trend: "down",
+      delta: "+6 min"
+    },
+    {
+      label: "Completion",
+      value: "92%",
+      trend: "neutral",
+      delta: "0%"
+    }
+  ];
+
+  // UI Helper Functions
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'success': return 'text-green-700 bg-green-50 border-green-200';
+      case 'warning': return 'text-yellow-700 bg-yellow-50 border-yellow-200';
+      case 'attention': return 'text-orange-700 bg-orange-50 border-orange-200';
+      default: return 'text-gray-700 bg-gray-50 border-gray-200';
+    }
+  };
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high': return 'bg-red-50 border-red-200 text-red-700';
+      case 'medium': return 'bg-yellow-50 border-yellow-200 text-yellow-700';
+      case 'low': return 'bg-blue-50 border-blue-200 text-blue-700';
+      default: return 'bg-gray-50 border-gray-200 text-gray-700';
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      {/* Header */}
+      <div className="px-6 py-4 border-b border-gray-200">
+        <h2 className="text-xl font-bold text-gray-900">Insights</h2>
+      </div>
+      
+      {/* Quick Stats Bar */}
+      <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 border-b border-gray-200">
+        {quickStats.map((stat, index) => (
+          <div key={index} className="text-center">
+            <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+            <div className="text-sm text-gray-600">{stat.label}</div>
+            <div className={`text-xs ${
+              stat.trend === 'up' ? 'text-green-600' :
+              stat.trend === 'down' ? 'text-red-600' :
+              'text-gray-600'
+            }`}>
+              {stat.delta}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Main Content */}
+      <div className="p-6 space-y-6">
+        {/* Priority Action Items */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900">Priority Actions</h3>
+            <span className="text-sm text-gray-500">Estimated time: 5-7 min</span>
+          </div>
+          {actionItems.map((item, index) => (
+            <div 
+              key={index}
+              className={`p-4 rounded-lg border ${getPriorityColor(item.priority)} flex items-start space-x-4`}
+            >
+              <div className="flex-1">
+                <div className="flex items-center space-x-2">
+                  <h4 className="font-medium">{item.title}</h4>
+                  <span className="text-xs px-2 py-1 rounded-full bg-white bg-opacity-50">
+                    {item.timeEstimate}
+                  </span>
+                </div>
+                <p className="text-sm mt-1">{item.description}</p>
+                <div className="flex items-center mt-2 text-sm space-x-4">
+                  <span className="flex items-center">
+                    <Brain className="w-4 h-4 mr-1" />
+                    {item.impact}
+                  </span>
+                </div>
+              </div>
+              <button className="p-2 hover:bg-white hover:bg-opacity-25 rounded">
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Status Cards */}
+        <div className="grid grid-cols-3 gap-4">
+          {Object.entries(noteInsights).map(([key, value]) => (
+            <div 
+              key={key}
+              className={`p-4 rounded-lg border ${getStatusColor(value.status)}`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="font-medium">{value.message}</div>
+                  <div className="text-sm mt-1">{value.detail}</div>
+                </div>
+                {value.status === 'success' ? (
+                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                ) : value.status === 'warning' ? (
+                  <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                ) : (
+                  <Clock className="w-5 h-5 text-orange-600" />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Patient Experience Section */}
+        <div className="border border-purple-200 rounded-lg p-4 bg-purple-50">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-purple-900">Patient Experience Analysis</h3>
+            <div className="flex items-center space-x-1">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className={`w-5 h-5 ${
+                    i < Math.floor(patientExperience.score)
+                      ? 'text-purple-500 fill-purple-500'
+                      : i < patientExperience.score
+                      ? 'text-purple-500 fill-purple-500 opacity-50'
+                      : 'text-purple-200'
+                  }`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-sm font-medium text-purple-900 mb-2">Strengths</h4>
+              <ul className="space-y-2">
+                {patientExperience.strengths.map((strength, index) => (
+                  <li key={index} className="flex items-center text-sm text-purple-700">
+                    <CheckCircle2 className="w-4 h-4 mr-2 text-purple-500" />
+                    {strength}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-purple-900 mb-2">Opportunities</h4>
+              <ul className="space-y-2">
+                {patientExperience.improvements.map((improvement, index) => (
+                  <li key={index} className="flex items-center text-sm text-purple-700">
+                    <Sparkles className="w-4 h-4 mr-2 text-purple-500" />
+                    {improvement}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <button
+          onClick={() => onStartOptimize()}
+          className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center space-x-2 shadow-lg"
+        >
+          <FileText className="w-5 h-5" />
+          <span>Start Note Optimization</span>
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+}

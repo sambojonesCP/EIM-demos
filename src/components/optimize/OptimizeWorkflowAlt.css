@@ -1,0 +1,65 @@
+/* Editor Styles */
+.ProseMirror {
+  padding: 1rem;
+  min-height: 300px;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+}
+
+.ProseMirror:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
+}
+
+/* Suggestion Markers */
+.suggestion-marker {
+  border-bottom: 2px solid;
+  cursor: pointer;
+}
+
+.suggestion-marker.grammar {
+  border-color: #ef4444;
+}
+
+.suggestion-marker.medical-term {
+  border-color: #3b82f6;
+}
+
+.suggestion-marker.completeness {
+  border-color: #f59e0b;
+}
+
+.suggestion-marker.patient-centered {
+  border-color: #8b5cf6;
+}
+
+/* Popup positioning */
+.suggestion-popup {
+  position: absolute;
+  z-index: 50;
+}
+
+/* Transitions */
+.suggestion-popup-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.suggestion-popup-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms, transform 200ms;
+}
+
+.suggestion-popup-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.suggestion-popup-exit-active {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 200ms, transform 200ms;
+}
